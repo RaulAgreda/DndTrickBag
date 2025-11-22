@@ -136,7 +136,7 @@ h1 { margin-bottom: 10px; font-size: 1.5rem; text-align: center; }
     font-size: 1.2rem;
     box-shadow: 0 3px 0 #6c3483;
     transition: transform 0.1s, box-shadow 0.1s;
-    display: flex;
+    display: none;
     align-items: center;
     gap: 5px;
     font-weight: bold;
@@ -355,4 +355,139 @@ h1 { margin-bottom: 10px; font-size: 1.5rem; text-align: center; }
     margin: 5px 0;
     font-size: 0.95rem;
     color: #444;
+}
+
+/* --- PANTALLA DE MUERTE --- */
+.death-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    color: white;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.death-screen.hidden {
+    display: none;
+}
+
+.tombstone {
+    font-size: 100px;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.death-screen h2 {
+    font-size: 3rem;
+    margin: 0;
+    color: #e74c3c;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    text-shadow: 0 0 10px #c0392b;
+}
+
+.death-screen p {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+.revive-btn {
+    background: linear-gradient(to bottom, #f1c40f, #f39c12);
+    color: #333;
+    border: none;
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-transform: uppercase;
+}
+
+.revive-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(241, 196, 15, 0.8);
+}
+
+/* --- MODAL DE NOMBRE --- */
+.naming-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.naming-modal.hidden {
+    display: none;
+}
+
+.naming-content {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    border: 4px solid #2c3e50;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    width: 90%;
+    max-width: 400px;
+}
+
+.naming-content h3 {
+    color: #8B0000;
+    margin-top: 0;
+}
+
+.naming-content input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2rem;
+    margin: 15px 0;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.confirm-btn {
+    background: linear-gradient(to bottom, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #1e8449;
+    transition: transform 0.1s;
+}
+
+.confirm-btn:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
 }

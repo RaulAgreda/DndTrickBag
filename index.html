@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <h1>🎒 Bolsa de Trucos (Nvl 20)</h1>
+    <h1>🎒 Bolsa de Trucos (Marrón)</h1>
 
     <div class="result-text" id="resultText">Pulsa para invocar</div>
 
@@ -17,10 +17,28 @@
         <div class="bag"></div>
     </div>
 
-    <button class="main-button" onclick="rollDice()">¡Lanzar Dado!</button>
+    <button class="main-button" id="rollButton" onclick="rollDice()">¡Lanzar Dado!</button>
+
+    <!-- Modal para nombrar -->
+    <div id="namingModal" class="naming-modal hidden">
+        <div class="naming-content">
+            <h3>¡Ha aparecido un <span id="namingSpecies"></span>!</h3>
+            <p>¿Cómo quieres llamarlo?</p>
+            <input type="text" id="animalNameInput" placeholder="Nombre del compañero" maxlength="20">
+            <button class="confirm-btn" onclick="confirmName()">¡A la aventura!</button>
+        </div>
+    </div>
 
     <div class="stat-card" id="statCard">
         </div>
+
+    <!-- Pantalla de Muerte -->
+    <div id="deathScreen" class="death-screen hidden">
+        <div class="tombstone">🪦</div>
+        <h2>R.I.P.</h2>
+        <p id="deathMessage">Tu compañero ha caído en combate...</p>
+        <button class="revive-btn" onclick="restartGame()">🔄 Reiniciar</button>
+    </div>
 
     <script src="script.js"></script>
 </body>

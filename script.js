@@ -104,6 +104,10 @@ const animals = [
 let currentCreature = null;
 let currentHP = 0;
 let maxHP = 0;
+let pendingCreature = null; // Variable temporal para el proceso de nombrado
+
+// Cargar estado al iniciar
+window.addEventListener('DOMContentLoaded', loadState);
 
 // Función para tirar dados de golpe
 function rollHitDice(diceString) {
@@ -117,6 +121,51 @@ function rollHitDice(diceString) {
         total += Math.floor(Math.random() * diceSize) + 1;
     }
     return total;
+}
+
+function saveState() {
+    if (!currentCreature) {
+        localStorage.removeItem('dndPokemonState');
+        return;
+    }
+    const state = {
+        id: currentCreature.id,
+        customName: currentCreature.customName,
+        currentHP: currentHP,
+        maxHP: maxHP
+    };
+    localStorage.setItem('dndPokemonState', JSON.stringify(state));
+}
+
+function loadState() {
+    const saved = localStorage.getItem('dndPokemonState');
+    if (saved) {
+        try {
+            const state = JSON.parse(saved);
+            const template = animals.find(a => a.id === state.id);
+            if (template) {
+                // Reconstruir criatura
+                const creature = { ...template };
+                creature.customName = state.customName;
+                creature.currentHP = state.currentHP;
+                creature.maxHP = state.maxHP;
+                
+                // Restaurar estado global
+                currentCreature = creature;
+                currentHP = state.currentHP;
+                maxHP = state.maxHP;
+
+                // Ocultar botón de lanzar inmediatamente
+                document.getElementById('rollButton').style.display = 'none';
+                
+                // Mostrar resultado directamente (sin animación de sorteo)
+                showResult(creature, true);
+            }
+        } catch (e) {
+            console.error("Error cargando estado:", e);
+            localStorage.removeItem('dndPokemonState');
+        }
+    }
 }
 
 // Función para calcular HP
@@ -150,13 +199,52 @@ function damageHP() {
     if (currentHP > 0) {
         currentHP--;
         updateHealthBar();
+        saveState(); // Guardar cambio
+        
+        if (currentHP === 0) {
+            showDeathScreen();
+        }
     }
+}
+
+function showDeathScreen() {
+    const deathScreen = document.getElementById('deathScreen');
+    const deathMessage = document.getElementById('deathMessage');
+    
+    if (deathScreen) {
+        const name = currentCreature ? (currentCreature.customName || currentCreature.name) : 'Tu compañero';
+        if (deathMessage) {
+            deathMessage.innerText = `${name} ha caído en combate...`;
+        }
+        deathScreen.classList.remove('hidden');
+    }
+}
+
+function restartGame() {
+    const deathScreen = document.getElementById('deathScreen');
+    if (deathScreen) {
+        deathScreen.classList.add('hidden');
+    }
+    
+    // Limpiar estado
+    localStorage.removeItem('dndPokemonState');
+    currentCreature = null;
+    currentHP = 0;
+    maxHP = 0;
+    
+    // Resetear UI
+    statCard.style.display = 'none';
+    document.getElementById('rollButton').style.display = 'block';
+    resultText.innerText = 'Pulsa para invocar';
+    animalSprite.innerText = '✨';
+    animalSprite.classList.remove('show');
 }
 
 function healHP() {
     if (currentHP < maxHP) {
         currentHP++;
         updateHealthBar();
+        saveState(); // Guardar cambio
     }
 }
 
@@ -176,6 +264,7 @@ function rerollHP() {
     }
     
     updateHealthBar();
+    saveState(); // Guardar cambio
     
     // Animación del botón
     const btn = document.getElementById('rerollHPBtn');
@@ -229,35 +318,100 @@ function rollDice() {
     animalSprite.classList.remove('show');
     resultText.innerText = 'Invocando...';
     animalSprite.innerText = '✨'; 
+    
+    // Asegurar que la pantalla de muerte no esté visible
+    const deathScreen = document.getElementById('deathScreen');
+    if (deathScreen) {
+        deathScreen.classList.add('hidden');
+    } 
 
-    // 2. Calcular resultado (1-8)
-    const result = Math.floor(Math.random() * 8) + 1;
-    const creature = animals.find(a => a.id === result);
+    // 2. Seleccionar criatura aleatoria
+    const randomIndex = Math.floor(Math.random() * animals.length);
+    const creature = animals[randomIndex];
+    
+    // Guardar referencia temporal
+    pendingCreature = creature;
 
     // 3. Esperar un momento antes de mostrar (efecto de suspense)
     setTimeout(() => {
-        showResult(creature);
+        revealCreatureSequence(creature);
         isRolling = false;
     }, 800);
 }
 
-function showResult(creature) {
-    // Calcular HP aleatorio
-    currentCreature = creature;
-    maxHP = calculateHP(creature);
-    currentHP = maxHP;
-    
-    // Mostrar texto del resultado
-    resultText.innerHTML = `¡Ha salido un <span style="color:white; font-size:1.8rem">${creature.id}</span>!`;
-
-    // Preparar emoji del animal
+function revealCreatureSequence(creature) {
+    // Mostrar qué es antes de nombrar
+    resultText.innerHTML = `¡Ha salido un <span style="color:white; font-size:1.8rem">${creature.name}</span>!`;
     animalSprite.innerText = creature.emoji;
     
-    // Animar salida de la bolsa con un pequeño retraso
+    // Animar salida
     setTimeout(() => {
         animalSprite.classList.add('show');
     }, 200);
 
+    // Esperar a que salga para pedir nombre
+    setTimeout(() => {
+        showNamingModal(creature);
+    }, 1200);
+}
+
+function showNamingModal(creature) {
+    const modal = document.getElementById('namingModal');
+    const speciesSpan = document.getElementById('namingSpecies');
+    const input = document.getElementById('animalNameInput');
+    
+    if (speciesSpan) speciesSpan.innerText = creature.name;
+    if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 100);
+    }
+    if (modal) modal.classList.remove('hidden');
+}
+
+function confirmName() {
+    const input = document.getElementById('animalNameInput');
+    const modal = document.getElementById('namingModal');
+    
+    const customName = input.value.trim() || pendingCreature.name;
+    
+    if (modal) modal.classList.add('hidden');
+    
+    // Crear instancia de criatura con nombre
+    const creature = { ...pendingCreature };
+    creature.customName = customName;
+    
+    // Inicializar HP si es nueva
+    maxHP = calculateHP(creature);
+    currentHP = maxHP;
+    creature.maxHP = maxHP;
+    creature.currentHP = currentHP;
+    
+    showResult(creature);
+}
+
+// Permitir confirmar con Enter
+document.getElementById('animalNameInput')?.addEventListener('keypress', function (e) {
+    if (e.key === 'Enter') {
+        confirmName();
+    }
+});
+
+function showResult(creature, isRestored = false) {
+    currentCreature = creature;
+    
+    // Guardar estado
+    saveState();
+    
+    // Mostrar texto del resultado
+    const displayName = creature.customName !== creature.name 
+        ? `${creature.customName} <span style="font-size:1rem">(${creature.name})</span>`
+        : creature.name;
+
+    resultText.innerHTML = `¡Ha salido: <span style="color:white; font-size:1.5rem">${displayName}</span>!`;
+
+    // Preparar emoji del animal
+    animalSprite.innerText = creature.emoji;
+    
     // Helper para modificadores
     const getMod = (score) => {
         const mod = Math.floor((score - 10) / 2);
@@ -296,8 +450,8 @@ function showResult(creature) {
     // Llenar la ficha HTML
     statCard.innerHTML = `
         <div class="stat-header">
-            <h2>${creature.emoji} ${creature.name}</h2>
-            <span>${creature.type} - D&D 5e</span>
+            <h2>${creature.emoji} ${creature.customName}</h2>
+            <span>${creature.type} - ${creature.name !== creature.customName ? creature.name : 'D&D 5e'}</span>
         </div>
         
         ${statsHtml}
@@ -337,12 +491,58 @@ function showResult(creature) {
         </a>
     `;
 
-    // Mostrar la carta deslizándola hacia arriba
-    setTimeout(() => {
+    // Animar salida de la bolsa con un pequeño retraso
+    if (!isRestored) {
+        // Ya salió el animal en la secuencia anterior, aseguramos que se vea
+        animalSprite.classList.add('show');
+        
+        setTimeout(() => {
+            statCard.style.display = 'block';
+            document.getElementById('rollButton').style.display = 'none'; // Ocultar botón de lanzar
+            updateHealthBar();
+            attachHPButtonEvents(); // Asignar eventos a los botones
+            // Scroll suave hacia la ficha en móviles si queda muy abajo
+            statCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    } else {
+        animalSprite.classList.add('show');
         statCard.style.display = 'block';
         updateHealthBar();
-        attachHPButtonEvents(); // Asignar eventos a los botones
-        // Scroll suave hacia la ficha en móviles si queda muy abajo
-        statCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 800);
+        attachHPButtonEvents();
+    }
 }
+
+// Función para copiar enlace
+function copyLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+        alert('Enlace copiado al portapapeles: ' + url);
+    }).catch(err => {
+        console.error('Error al copiar el enlace: ', err);
+    });
+}
+
+// Asignar evento de clic al botón de copiar
+document.getElementById('copyLinkBtn')?.addEventListener('click', copyLink);
+
+// Mostrar ayuda
+function showHelp() {
+    const helpText = `Instrucciones:\n\n` +
+                     `1. Presiona "Lanzar Dado" para invocar un animal al azar.\n` +
+                     `2. Nombra a tu animal y confirma.\n` +
+                     `3. Usa los botones de daño, curar y reroll para gestionar la vida de tu animal.\n` +
+                     `4. Consulta las estadísticas, habilidades y acciones del animal en la tarjeta de estadísticas.\n` +
+                     `5. Copia el enlace para compartir tu animal.\n\n` +
+                     `¡Diviértete y que comience la aventura!`;
+    
+    alert(helpText);
+}
+
+// Asignar evento de clic al botón de ayuda
+document.getElementById('helpBtn')?.addEventListener('click', showHelp);
+
+// Reproducir sonido de fondo
+const backgroundAudio = new Audio('sonidos/ambiente.mp3');
+backgroundAudio.loop = true;
+backgroundAudio.volume = 0.3;
+backgroundAudio.play().catch(e => console.log("Error al reproducir sonido de fondo:", e));
