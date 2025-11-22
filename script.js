@@ -210,11 +210,16 @@ function damageHP() {
 function showDeathScreen() {
     const deathScreen = document.getElementById('deathScreen');
     const deathMessage = document.getElementById('deathMessage');
-    
     if (deathScreen) {
         const name = currentCreature ? (currentCreature.customName || currentCreature.name) : 'Tu compañero';
+        const deathMessages = [
+            `¡Oh no! a ${name} le ha dado un parraque.`,
+            `¿Sabías que en Suiza es ilegal tener una sola cobaya?\nPor cierto ${name} ha muerto.`,
+            `${name} se ha desmayado por el esfuerzo.`,
+            `¡Cuidado ${name}! que se te cae la sonrisa.\n...y la vida.`,
+        ];
         if (deathMessage) {
-            deathMessage.innerText = `${name} ha caído en combate...`;
+            deathMessage.innerText = deathMessages[Math.floor(Math.random() * deathMessages.length)];
         }
         deathScreen.classList.remove('hidden');
     }
