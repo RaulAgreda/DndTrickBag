@@ -79,6 +79,21 @@ h1 { margin-bottom: 10px; font-size: 1.5rem; text-align: center; }
     transform: scale(0.5);
 }
 
+.animal-sprite .animal-image {
+    display: block;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.animal-card-icon {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
 .animal-sprite.show {
     bottom: 130px; /* Sube arriba */
     opacity: 1;

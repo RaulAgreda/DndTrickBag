@@ -1,7 +1,7 @@
 // Datos de los animales (Estadísticas base reales de D&D 5e)
 const animals = [
     { 
-        id: 1, name: "Chacal", type: "Bestia Pequeña", emoji: "🐺", ac: 12, hitDice: "1d6", hitDiceBonus: 0, speed: "40 pies", 
+        id: 1, name: "Chacal", type: "Bestia Pequeña", image: "img/chacal.png", ac: 12, hitDice: "1d6", hitDiceBonus: 0, speed: "40 pies", 
         stats: { str: 8, dex: 15, con: 11, int: 3, wis: 12, cha: 6 },
         skills: "Percepción +3", senses: "Percepción pasiva 13",
         traits: [
@@ -14,7 +14,7 @@ const animals = [
         url: "https://nivel20.com/games/dnd-5/creatures/225-chacal" 
     },
     { 
-        id: 2, name: "Simio", type: "Bestia Mediana", emoji: "🦍", ac: 12, hitDice: "3d8", hitDiceBonus: 6, speed: "30 pies, 30 pies escalando", 
+        id: 2, name: "Simio", type: "Bestia Mediana", image: "img/simio.png", ac: 12, hitDice: "3d8", hitDiceBonus: 6, speed: "30 pies, 30 pies escalando", 
         stats: { str: 16, dex: 14, con: 14, int: 6, wis: 12, cha: 7 },
         skills: "Atletismo +5, Percepción +3", senses: "Percepción pasiva 13",
         traits: [],
@@ -26,7 +26,7 @@ const animals = [
         url: "https://nivel20.com/games/dnd-5/creatures/284-simio" 
     },
     { 
-        id: 3, name: "Babuino", type: "Bestia Pequeña", emoji: "🐒", ac: 12, hitDice: "1d6", hitDiceBonus: 0, speed: "30 pies, 30 pies escalando", 
+        id: 3, name: "Babuino", type: "Bestia Pequeña", image: "img/babuino.png", ac: 12, hitDice: "1d6", hitDiceBonus: 0, speed: "30 pies, 30 pies escalando", 
         stats: { str: 8, dex: 14, con: 11, int: 4, wis: 12, cha: 6 },
         skills: "-", senses: "Percepción pasiva 11",
         traits: [
@@ -38,7 +38,7 @@ const animals = [
         url: "https://nivel20.com/games/dnd-5/creatures/209-babuino" 
     },
     { 
-        id: 4, name: "Pico de Hacha", type: "Bestia Grande", emoji: "🦤", ac: 11, hitDice: "3d10", hitDiceBonus: 3, speed: "50 pies", 
+        id: 4, name: "Pico de Hacha", type: "Bestia Grande", image: "img/pico_de_hacha.png", ac: 11, hitDice: "3d10", hitDiceBonus: 3, speed: "50 pies", 
         stats: { str: 14, dex: 12, con: 12, int: 2, wis: 10, cha: 5 },
         skills: "-", senses: "Percepción pasiva 10",
         traits: [],
@@ -48,7 +48,7 @@ const animals = [
         url: "https://nivel20.com/games/dnd-5/creatures/244-hachapico" 
     },
     { 
-        id: 5, name: "Oso Negro", type: "Bestia Mediana", emoji: "🐻", ac: 11, hitDice: "3d8", hitDiceBonus: 6, speed: "40 pies, 30 pies escalando", 
+        id: 5, name: "Oso Negro", type: "Bestia Mediana", image: "img/oso_negro.png", ac: 11, hitDice: "3d8", hitDiceBonus: 6, speed: "40 pies, 30 pies escalando", 
         stats: { str: 15, dex: 10, con: 14, int: 2, wis: 12, cha: 7 },
         skills: "Percepción +3", senses: "Percepción pasiva 13",
         traits: [
@@ -62,7 +62,7 @@ const animals = [
         url: "https://nivel20.com/games/dnd-5/creatures/263-oso-negro" 
     },
     { 
-        id: 6, name: "Comadreja Gigante", type: "Bestia Mediana", emoji: "🦦", ac: 13, hitDice: "2d8", hitDiceBonus: 0, speed: "40 pies", 
+        id: 6, name: "Comadreja Gigante", type: "Bestia Mediana", image: "img/comadreja_gigante.png", ac: 13, hitDice: "2d8", hitDiceBonus: 0, speed: "40 pies", 
         stats: { str: 11, dex: 16, con: 10, int: 4, wis: 12, cha: 5 },
         skills: "Percepción +3, Sigilo +5", senses: "Visión en la oscuridad 60 pies, Percepción pasiva 13",
         traits: [
@@ -74,7 +74,7 @@ const animals = [
         url: "https://nivel20.com/games/dnd-5/creatures/231-comadreja-gigante" 
     },
     { 
-        id: 7, name: "Hiena Gigante", type: "Bestia Grande", emoji: "🐕", ac: 12, hitDice: "6d10", hitDiceBonus: 12, speed: "50 pies", 
+        id: 7, name: "Hiena Gigante", type: "Bestia Grande", image: "img/hiena_gigante.png", ac: 12, hitDice: "6d10", hitDiceBonus: 12, speed: "50 pies", 
         stats: { str: 16, dex: 14, con: 14, int: 2, wis: 12, cha: 7 },
         skills: "Percepción +3", senses: "Percepción pasiva 13",
         traits: [
@@ -86,7 +86,7 @@ const animals = [
         url: "https://nivel20.com/games/dnd-5/creatures/248-hiena-gigante" 
     },
     { 
-        id: 8, name: "Tigre", type: "Bestia Grande", emoji: "🐅", ac: 12, hitDice: "5d10", hitDiceBonus: 10, speed: "40 pies", 
+        id: 8, name: "Tigre", type: "Bestia Grande", image: "img/tigre.png", ac: 12, hitDice: "5d10", hitDiceBonus: 10, speed: "40 pies", 
         stats: { str: 17, dex: 15, con: 14, int: 3, wis: 12, cha: 8 },
         skills: "Percepción +3, Sigilo +6", senses: "Visión en la oscuridad 60 pies, Percepción pasiva 13",
         traits: [
@@ -314,6 +314,14 @@ const statCard = document.getElementById('statCard');
 const resultText = document.getElementById('resultText');
 let isRolling = false;
 
+function animalImageMarkup(creature, className = 'animal-image') {
+    return `<img class="${className}" src="${creature.image}" alt="${creature.name}" draggable="false">`;
+}
+
+function setAnimalSprite(creature) {
+    animalSprite.innerHTML = animalImageMarkup(creature);
+}
+
 function rollDice() {
     if (isRolling) return;
     isRolling = true;
@@ -347,7 +355,7 @@ function rollDice() {
 function revealCreatureSequence(creature) {
     // Mostrar qué es antes de nombrar
     resultText.innerHTML = `¡Ha salido un <span style="color:white; font-size:1.8rem">${creature.name}</span>!`;
-    animalSprite.innerText = creature.emoji;
+    setAnimalSprite(creature);
     
     // Animar salida
     setTimeout(() => {
@@ -414,8 +422,8 @@ function showResult(creature, isRestored = false) {
 
     resultText.innerHTML = `¡Ha salido: <span style="color:white; font-size:1.5rem">${displayName}</span>!`;
 
-    // Preparar emoji del animal
-    animalSprite.innerText = creature.emoji;
+    // Preparar imagen del animal
+    setAnimalSprite(creature);
     
     // Helper para modificadores
     const getMod = (score) => {
@@ -455,7 +463,7 @@ function showResult(creature, isRestored = false) {
     // Llenar la ficha HTML
     statCard.innerHTML = `
         <div class="stat-header">
-            <h2>${creature.emoji} ${creature.customName}</h2>
+            <h2>${animalImageMarkup(creature, 'animal-card-icon')} ${creature.customName}</h2>
             <span>${creature.type} - ${creature.name !== creature.customName ? creature.name : 'D&D 5e'}</span>
         </div>
         
