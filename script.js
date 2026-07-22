@@ -553,9 +553,3 @@ function showHelp() {
 
 // Asignar evento de clic al botón de ayuda
 document.getElementById('helpBtn')?.addEventListener('click', showHelp);
-
-// Reproducir sonido de fondo
-const backgroundAudio = new Audio('sonidos/ambiente.mp3');
-backgroundAudio.loop = true;
-backgroundAudio.volume = 0.3;
-backgroundAudio.play().catch(e => console.log("Error al reproducir sonido de fondo:", e));
